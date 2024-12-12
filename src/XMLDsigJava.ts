@@ -265,10 +265,10 @@ class XMLDsig {
           { encoding: "UTF-8" },
           (error: any, stdout: any, stderr: any) => {
             if (error) {
-              reject(error);
+              reject(new Error(error));
             }
             if (stderr) {
-              reject(stderr);
+              reject(new Error(stderr));
             }
 
             try {
@@ -277,7 +277,11 @@ class XMLDsig {
               console.error(err);
             }
 
-            resolve(`${stdout}`);
+            let respuestaJson = {};
+            if (stdout && (stdout + "").startsWith("{")) {
+              respuestaJson = JSON.parse(`${stdout}`);
+            }
+            resolve(respuestaJson);
           }
         );
       });
