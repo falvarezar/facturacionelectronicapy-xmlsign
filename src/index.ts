@@ -1,3 +1,4 @@
+import dsigJava from "./XMLDsigJava";
 import dsigNode from "./XMLDsigNode";
 
 class DESign {
@@ -9,7 +10,9 @@ class DESign {
   ): Promise<any> => {
     if (signByNodeJS == true) {
       return dsigNode.signDocument(xml, "DE", file, password);
-    } 
+    } else {
+      return dsigJava.signDocument(xml, "DE", file, password);
+    }
     //return dsigJava.signDocument(xml, "DE", file, password);
   };
 
@@ -21,7 +24,9 @@ class DESign {
   ): Promise<any> => {
     if (signByNodeJS == true) {
       return dsigNode.signDocuments(xmls, "DE", file, password);
-    } 
+    } else {
+      return dsigJava.signDocuments(xmls, "DE", file, password);
+    }
   };
 
   /*signXMLFilesNode = (
@@ -41,7 +46,9 @@ class DESign {
   ): Promise<any> => {
     if (signByNodeJS == true) {
       return dsigNode.signEvento(xml, "rEve", file, password);
-    } 
+    } else {
+      return dsigJava.signEvento(xml, "rEve", file, password);
+    }
 
     //return dsigNode.signDocument([xml], "DE", file, password);
   };
@@ -54,7 +61,9 @@ class DESign {
   ): Promise<any> => {
     if (signByNodeJS == true) {
       return dsigNode.signDocument(xml, "recibo", file, password);
-    } 
+    } else {
+      return dsigJava.signDocument(xml, "recibo", file, password);
+    }
     //return dsigNode.signDocument([xml], "DE", file, password);
   };
 
@@ -65,7 +74,9 @@ class DESign {
   ): Promise<any> => {
     if (useNodeJS == true) {
       return dsigNode.getExpiration(file, password);
-    } 
+    } else {
+      return dsigJava.getExpiration(file, password);
+    }
   };
 }
 
