@@ -1,7 +1,5 @@
-//const pkcs12 = require('facturacionelectronicapy-pkcs12');
-const fs = require("fs");
+const fs = require("fs").promises;
 const { SignedXml, FileKeyInfo } = require("xml-crypto");
-const xmlbuilder = require("xmlbuilder");
 const xml2js = require("xml2js");
 
 import forge from "node-forge";
@@ -20,13 +18,9 @@ class XMLDsigNode {
       var dsig = null;
       try {
         var separator = "_SEPARATOR_";
-        this.openFile(file, password);
+        await this.openFile(file, password);
 
         let certificate: any = this.getCertificate();
-
-        // Crear un objeto SignedXml
-
-        // Configurar la clave privada para firmar (ejemplo, deberías cargar tu propia clave privada)
 
         let xmlFirmado = "";
         for (let i = 0; i < xmls.length; i++) {
@@ -96,13 +90,9 @@ class XMLDsigNode {
     return new Promise(async (resolve, reject) => {
       var dsig = null;
       try {
-        this.openFile(file, password);
+        await this.openFile(file, password);
 
         let certificate: any = this.getCertificate();
-
-        // Crear un objeto SignedXml
-
-        // Configurar la clave privada para firmar (ejemplo, deberías cargar tu propia clave privada)
 
         let xmlFirmado = "";
 
@@ -158,14 +148,9 @@ class XMLDsigNode {
     return new Promise(async (resolve, reject) => {
       var dsig = null;
       try {
-        //var separator = "_SEPARATOR_";
-        this.openFile(file, password);
+        await this.openFile(file, password);
 
         let certificate: any = this.getCertificate();
-
-        // Crear un objeto SignedXml
-
-        // Configurar la clave privada para firmar (ejemplo, deberías cargar tu propia clave privada)
 
         let xmlFirmado = "";
 
@@ -225,19 +210,19 @@ class XMLDsigNode {
     });
   }
 
-  openCertificate(file: string) {
-    if (fs.existsSync(file)) {
-      const pkcs12 = fs.readFileSync(file);
+  async openCertificate(file: string) {
+    const exists = await fs.access(file).then(() => true).catch(() => false);
+    if (exists) {
+      const pkcs12 = await fs.readFile(file);
       this.p12Asn1 = forge.asn1.fromDer(pkcs12.toString("binary"));
     } else {
       throw Error(file + " no encontrado!");
     }
   }
 
-  openFile(file: string, passphase: string) {
-    this.openCertificate(file);
-
-    this.p12 = forge.pkcs12.pkcs12FromAsn1(this.p12Asn1, false, passphase);
+  async openFile(file: string, passphrase: string) {
+    await this.openCertificate(file);
+    this.p12 = forge.pkcs12.pkcs12FromAsn1(this.p12Asn1, false, passphrase);
   }
 
   cleanCertificate() {
@@ -274,7 +259,7 @@ class XMLDsigNode {
   public async getExpiration(file: string, password: string) {
     return new Promise(async (resolve, reject) => {
       try {
-        const p12File = fs.readFileSync(file);
+        const p12File = await fs.readFile(file);
         const p12Asn1 = forge.asn1.fromDer(
           forge.util.createBuffer(p12File.toString("binary"))
         );
