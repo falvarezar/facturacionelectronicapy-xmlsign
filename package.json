@@ -4,7 +4,6 @@
   "description": "Módulo NodeJs para la firma de Archivo XML para la Facturación Electrónica en Paraguay",
   "main": "dist/index.js",
   "scripts": {
-    "prebuild": "javac src/SignXML.java src/SignXMLFiles.java src/SignXMLEvento.java src/CertExpiration.java",
     "build": "tsc && copyfiles --up 1 src/**/*.class dist",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
@@ -40,7 +39,6 @@
   "dependencies": {
     "copyfiles": "^2.4.1",
     "facturacionelectronicapy-xmlsign": "file:",
-    "find-java-home": "^1.2.2",
     "node-forge": "^1.3.1",
     "xml-crypto": "^6.0.0",
     "xml2js": "^0.4.23",
@@ -48,7 +46,6 @@
     "xmldom": "^0.6.0"
   },
   "devDependencies": {
-    "@types/find-java-home": "^1.0.0",
     "@types/node-forge": "^0.10.10",
     "@types/xml-crypto": "^1.4.2",
     "@types/xml2js": "^0.4.9",
